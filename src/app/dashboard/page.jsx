@@ -2,7 +2,7 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import React, { useState, useEffect } from 'react';
-import { Flex, Stack, Spinner, Text, Grid, GridItem, Editable, EditableInput, EditablePreview} from '@chakra-ui/react';
+import { Flex, Stack, Spinner, Text, Grid, GridItem, Editable, EditableInput, EditablePreview } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import DataChart from 'src/components/DataChart';
 
@@ -13,11 +13,28 @@ function DashboardPage() {
   const [user, setUser] = useState(null);
   const [plants, setPlants] = useState(null);
 
-  const [plantName, setPlantName] = useState("");
+  const [plantName, setPlantName] = useState('');
 
-  const handlePlantNameChange = (newPlantName) => {
-    setPlantName(newPlantName);
+  const handlePlantNameChange = async (value) => {
+    setPlantName(value);
+
+    const { data, error } = await supabase
+      .from('plants')
+      .update({ plant_name: value })
+      .eq('id', plants[0].id);
+
+    if (error) {
+      console.error('Error updating plant name: ', error);
+    } else {
+      console.log('Plant name updated successfully: ', data);
+    }
   };
+
+  useEffect(() => {
+    if (plants && plants.length > 0) {
+      setPlantName(plants[0].plant_name);
+    }
+  }, [plants]);
 
   useEffect(() => {
     supabase.auth.getUser().then((response) => {
@@ -30,19 +47,14 @@ function DashboardPage() {
         console.log('plants')
         console.log(response.data)
         setPlants(response.data);
-        
+
       });
-      
+
       setUser(response.data.user);
       setLoading(false);
-      
-      
+
+
     });
-    if(plants && (plants[0].plant_name !== null)){
-      setPlantName( plants[0].plant_name)
-      console.log("here")
-    }
-    console.log(plantName)
   }, []);
 
   if (loading) {
@@ -59,15 +71,17 @@ function DashboardPage() {
     router.push('/sign-in');
   }
 
-
   return (
+    
+
     <Stack color="white" align="center">
       <Text fontWeight="semibold" fontSize="4rem" p="1rem">Dashboard</Text>
-      {/* <Text fontWeight="semibold" fontSize="2rem" p="1rem">{plants && plants[0].plant_name}</Text> */}
-      <Editable fontWeight="semibold" fontSize="2rem" p="1rem" color="white" value={plantName} onChange={handlePlantNameChange}>
+      <Editable fontWeight="semibold" fontSize="2rem" p="1rem" color="white" value={plantName} onChange={handlePlantNameChange} textAlign="center">
         <EditablePreview />
         <EditableInput />
       </Editable>
+
+
       <Grid
         templateColumns={{ sm: 'repeat(2, 1fr)', md: "repeat(4, 1fr)" }}
         gap="3rem"
@@ -96,13 +110,6 @@ function DashboardPage() {
             lightValues.push(data.value);
             lightLabels.push(data.date);
           });
-          let airPressureData = plant.air_pressure_data;
-          let airPressureValues = [];
-          let airPressureLabels = [];
-          airPressureData.map((data) => {
-            airPressureValues.push(data.value);
-            airPressureLabels.push(data.date);
-          });
           let soilMoistureData = plant.soil_moisture_data;
           let soilMoistureValues = [];
           let soilMoistureLabels = [];
@@ -115,11 +122,11 @@ function DashboardPage() {
           return (
             <>
               <DataChart title="Temperature" data={{
-                labels: tempLabels,
+                labels: tempLabels.slice(-20),
                 datasets: [
                   {
                     label: 'Data',
-                    data: tempValues,
+                    data: tempValues.slice(-20),
                     fill: false,
                     backgroundColor: '#68D391',
                     borderColor: '#68D391',
@@ -128,11 +135,11 @@ function DashboardPage() {
                 ],
               }} />
               <DataChart title="Humidity" data={{
-                labels: humidityLabels,
+                labels: humidityLabels.slice(-20),
                 datasets: [
                   {
                     label: 'Data',
-                    data: humidityValues,
+                    data: humidityValues.slice(-20),
                     fill: false,
                     backgroundColor: '#68D391',
                     borderColor: '#68D391',
@@ -141,24 +148,11 @@ function DashboardPage() {
                 ],
               }} />
               <DataChart title="Light" data={{
-                labels: lightLabels,
+                labels: lightLabels.slice(-20),
                 datasets: [
                   {
                     label: 'Data',
-                    data: lightValues,
-                    fill: false,
-                    backgroundColor: '#68D391',
-                    borderColor: '#68D391',
-                    tension: 0.1,
-                  },
-                ],
-              }} />
-              <DataChart title="Air Pressure" data={{
-                labels: airPressureLabels,
-                datasets: [
-                  {
-                    label: 'Data',
-                    data: airPressureValues,
+                    data: lightValues.slice(-20),
                     fill: false,
                     backgroundColor: '#68D391',
                     borderColor: '#68D391',
@@ -167,11 +161,11 @@ function DashboardPage() {
                 ],
               }} />
               <DataChart title="Soil Moisture" data={{
-                labels: soilMoistureLabels,
+                labels: soilMoistureLabels.slice(-20),
                 datasets: [
                   {
                     label: 'Data',
-                    data: soilMoistureValues,
+                    data: soilMoistureValues.slice(-20),
                     fill: false,
                     backgroundColor: '#68D391',
                     borderColor: '#68D391',
