@@ -9,6 +9,8 @@ import {
     LinearScale,
     PointElement,
     LineElement,
+    LineController,
+    
 } from 'chart.js';
   import {
     Chart
