@@ -50,38 +50,36 @@ const SignIn = () => {
           {({ errors, touched }) => (
             <Form style={{ display: "flex", flexDirection: "column" }} >
               <Text w={"100%"} left={"0"} align={"left"} marginX={"10px"} marginY={"5px"} fontWeight={"bold"} color={"gray.300"}>Email</Text>
-              <Input
+              <Field
                 id="email"
                 name="email"
-                placeholder="sprout@spy.com"
                 type="email"
-                bgColor={errors.email && touched.email ? "rgba(255, 100, 100, 0.2)" : "white"}
-                focusBorderColor={'green.400'}
-                errorBorderColor={'rgba(255, 100, 100, 0.2)'}
+                placeholder="sprout@spy.com"
+                style={{ backgroundColor: "white", borderRadius: "5px", paddingLeft: "5px", paddingTop: "2px", paddingBottom: "2px" }}
+
               />
               {errors.email && touched.email ? (
                 <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"}>{String(errors.email)}</Text>
               ) : <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"} >&nbsp;</Text>}
 
               <Text w={"100%"} left={"0"} align={"left"} marginX={"10px"} marginY={"5px"} fontWeight={"bold"} color={"gray.300"}>Password</Text>
-              <InputGroup size='md'>
-                <Input
-                  pr='4.5rem'
+              <InputGroup size="md" width={"100%"}>
+                <Field
+                  id="password"
+                  name="password"
                   type={show ? 'text' : 'password'}
-                  placeholder='Enter password'
-                  bgColor={errors.email && touched.email ? "rgba(255, 100, 100, 0.2)" : "white"}
-                  focusBorderColor={'green.400'}
-                  errorBorderColor={'rgba(255, 100, 100, 0.2)'}
+                  style={{ backgroundColor: "white", borderRadius: "5px", paddingLeft: "5px", paddingTop: "2px", paddingBottom: "2px", width: "calc(100% - 4.5rem)" }}
                 />
-                <InputRightElement width='4.5rem'>
+
+                <InputRightElement width='4.5rem'  mt={"-0.4rem"}>
                   <Button h='1.75rem' size='sm' onClick={handleClick}>
                     {show ? 'Hide' : 'Show'}
                   </Button>
                 </InputRightElement>
               </InputGroup>
               {errors.password && touched.password ? (
-                <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"} margin={0}>{String(errors.password)}</Text>
-              ) : <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"} margin={0}>&nbsp;</Text>}
+                <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"}>{String(errors.password)}</Text>
+              ) : <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"} >&nbsp;</Text>}
 
               <Link href="/reset-password" marginBottom={"20px"} color={"gray.300"} fontWeight={"bold"}>
                 Forgot your password?

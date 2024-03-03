@@ -46,19 +46,19 @@ const ResetPassword = () => {
         >
           {({ errors, touched }) => (
             <Form style={{ display: "flex", flexDirection: "column" }} >
-              <Text w={"100%"} left={"0"} align={"left"} marginX={"10px"} marginY={"5px"} fontWeight={"bold"} color={"gray.300"}>Email</Text>
-              <Input
-                id="email"
-                name="email"
-                placeholder="sprout@spy.com"
-                type="email"
-                bgColor={errors.email && touched.email ? "rgba(255, 100, 100, 0.2)" : "white"}
-                focusBorderColor={'green.400'}
-              />
-              {errors.email && touched.email ? (
-                <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"}>{String(errors.email)}</Text>
-              ) : <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"} >&nbsp;</Text>}
-              <Button colorScheme={"green"} w={"45%"} type="submit" marginY={"20px"}>
+            <Text w={"100%"} left={"0"} align={"left"} marginX={"10px"} marginY={"5px"} fontWeight={"bold"} color={"gray.300"}>Email</Text>
+            <Field
+              id="email"
+              name="email"
+              type="email"
+              placeholder="sprout@spy.com"
+              style={{ backgroundColor: "white", borderRadius: "5px", paddingLeft: "5px", paddingTop: "2px", paddingBottom: "2px" }}
+
+            />
+            {errors.email && touched.email ? (
+              <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"}>{String(errors.email)}</Text>
+            ) : <Text w={"100%"} color={"red"} fontSize={"xl"} align={"left"} >&nbsp;</Text>}
+              <Button colorScheme={"green"} w={"45%"} marginY={"20px"}>
                 Submit
               </Button>
             </Form>

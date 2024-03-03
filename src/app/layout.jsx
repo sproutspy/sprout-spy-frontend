@@ -1,7 +1,7 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, Text } from '@chakra-ui/react'
 import AuthProvider from 'src/components/AuthProvider';
 
 // do not cache this layout
