@@ -2,7 +2,7 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import React, { useState, useEffect } from 'react';
-import { Flex, Stack, Spinner, Text, Grid, GridItem, Editable, EditableInput, EditablePreview } from '@chakra-ui/react';
+import { Flex, Stack, Spinner, Text, Grid, Link, Editable, EditableInput, EditablePreview, Button } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import DataChart from 'src/components/DataChart';
 
@@ -66,123 +66,149 @@ function DashboardPage() {
       </Flex>
     );
   }
+  async function handleSignOut() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error('ERROR:', error);
+    }else{
+      router.push('/sign-in');
+    }
+    
+  }
 
   if (!user) {
     router.push('/sign-in');
   }
 
+  function Grd({plants}){
+    return
+  }
+
   return (
-    
+    <>
+      <Flex marginY={"5px"} width={"100%"} justifyContent={"space-between"}>
+        <Link href='/new-plant'>
+        <Button colorScheme={"green"} fontSize={"1.5rem"} marginX={"5px"}>+</Button>
+        </Link>
+        <Button colorScheme={"green"} onClick={ () => {handleSignOut();
+        router.push('/sign-in');
+      }
+        } marginX={"5px"}>
+          Sign Out
+        </Button>
+      </Flex>
 
-    <Stack color="white" align="center">
-      <Text fontWeight="semibold" fontSize="4rem" p="1rem">Dashboard</Text>
-      <Editable fontWeight="semibold" fontSize="2rem" p="1rem" color="white" value={plantName} onChange={handlePlantNameChange} textAlign="center">
-        <EditablePreview />
-        <EditableInput />
-      </Editable>
+      <Stack color="white" align="center">
+        <Text fontWeight="semibold" fontSize="4rem" p="1rem">Dashboard</Text>
+        <Editable fontWeight="semibold" fontSize="2rem" p="1rem" color="white" value={plantName} onChange={handlePlantNameChange} textAlign="center">
+          <EditablePreview />
+          <EditableInput />
+        </Editable>
 
-
-      <Grid
-        templateColumns={{ sm: 'repeat(2, 1fr)', md: "repeat(4, 1fr)" }}
-        gap="3rem"
-        w="100%"
-        p="3rem"
-      >
-        {plants && plants.map((plant) => {
-          let tempData = plant.temperature_data;
-          let tempValues = [];
-          let tempLabels = [];
-          tempData.map((data) => {
-            tempValues.push(data.value);
-            tempLabels.push(data.date);
-          });
-          let humidityData = plant.humidity_data;
-          let humidityValues = [];
-          let humidityLabels = [];
-          humidityData.map((data) => {
-            humidityValues.push(data.value);
-            humidityLabels.push(data.date);
-          });
-          let lightData = plant.light_data;
-          let lightValues = [];
-          let lightLabels = [];
-          lightData.map((data) => {
-            lightValues.push(data.value);
-            lightLabels.push(data.date);
-          });
-          let soilMoistureData = plant.soil_moisture_data;
-          let soilMoistureValues = [];
-          let soilMoistureLabels = [];
-          soilMoistureData.map((data) => {
-            soilMoistureValues.push(data.value);
-            soilMoistureLabels.push(data.date);
-          });
-
-
-          return (
-            <>
-              <DataChart title="Temperature" data={{
-                labels: tempLabels.slice(-20),
-                datasets: [
-                  {
-                    label: 'Data',
-                    data: tempValues.slice(-20),
-                    fill: false,
-                    backgroundColor: '#68D391',
-                    borderColor: '#68D391',
-                    tension: 0.1,
-                  },
-                ],
-              }} />
-              <DataChart title="Humidity" data={{
-                labels: humidityLabels.slice(-20),
-                datasets: [
-                  {
-                    label: 'Data',
-                    data: humidityValues.slice(-20),
-                    fill: false,
-                    backgroundColor: '#68D391',
-                    borderColor: '#68D391',
-                    tension: 0.1,
-                  },
-                ],
-              }} />
-              <DataChart title="Light" data={{
-                labels: lightLabels.slice(-20),
-                datasets: [
-                  {
-                    label: 'Data',
-                    data: lightValues.slice(-20),
-                    fill: false,
-                    backgroundColor: '#68D391',
-                    borderColor: '#68D391',
-                    tension: 0.1,
-                  },
-                ],
-              }} />
-              <DataChart title="Soil Moisture" data={{
-                labels: soilMoistureLabels.slice(-20),
-                datasets: [
-                  {
-                    label: 'Data',
-                    data: soilMoistureValues.slice(-20),
-                    fill: false,
-                    backgroundColor: '#68D391',
-                    borderColor: '#68D391',
-                    tension: 0.1,
-                  },
-                ],
-              }} />
-
-            </>
-
-          );
-        })}
+        {/* make multiople grids so that you can edit the name of multiple plants */}
+        <Grid
+          templateColumns={{ sm: 'repeat(2, 1fr)', md: "repeat(4, 1fr)" }}
+          gap="3rem"
+          w="100%"
+          p="3rem"
+        >
+          {plants && plants.map((plant) => {
+            let tempData = plant.temperature_data;
+            let tempValues = [];
+            let tempLabels = [];
+            tempData.map((data) => {
+              tempValues.push(data.value);
+              tempLabels.push(data.date);
+            });
+            let humidityData = plant.humidity_data;
+            let humidityValues = [];
+            let humidityLabels = [];
+            humidityData.map((data) => {
+              humidityValues.push(data.value);
+              humidityLabels.push(data.date);
+            });
+            let lightData = plant.light_data;
+            let lightValues = [];
+            let lightLabels = [];
+            lightData.map((data) => {
+              lightValues.push(data.value);
+              lightLabels.push(data.date);
+            });
+            let soilMoistureData = plant.soil_moisture_data;
+            let soilMoistureValues = [];
+            let soilMoistureLabels = [];
+            soilMoistureData.map((data) => {
+              soilMoistureValues.push(data.value);
+              soilMoistureLabels.push(data.date);
+            });
 
 
-      </Grid>
+            return (
+              <>
+                <DataChart title="Temperature" data={{
+                  labels: tempLabels.slice(-20),
+                  datasets: [
+                    {
+                      label: 'Data',
+                      data: tempValues.slice(-20),
+                      fill: false,
+                      backgroundColor: '#68D391',
+                      borderColor: '#68D391',
+                      tension: 0.1,
+                    },
+                  ],
+                }} />
+                <DataChart title="Humidity" data={{
+                  labels: humidityLabels.slice(-20),
+                  datasets: [
+                    {
+                      label: 'Data',
+                      data: humidityValues.slice(-20),
+                      fill: false,
+                      backgroundColor: '#68D391',
+                      borderColor: '#68D391',
+                      tension: 0.1,
+                    },
+                  ],
+                }} />
+                <DataChart title="Light" data={{
+                  labels: lightLabels.slice(-20),
+                  datasets: [
+                    {
+                      label: 'Data',
+                      data: lightValues.slice(-20),
+                      fill: false,
+                      backgroundColor: '#68D391',
+                      borderColor: '#68D391',
+                      tension: 0.1,
+                    },
+                  ],
+                }} />
+                <DataChart title="Soil Moisture" data={{
+                  labels: soilMoistureLabels.slice(-20),
+                  datasets: [
+                    {
+                      label: 'Data',
+                      data: soilMoistureValues.slice(-20),
+                      fill: false,
+                      backgroundColor: '#68D391',
+                      borderColor: '#68D391',
+                      tension: 0.1,
+                    },
+                  ],
+                }} />
 
-    </Stack>
+              </>
+
+            );
+          })}
+
+
+        </Grid>
+
+      </Stack></>
   );
 
 }
